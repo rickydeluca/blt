@@ -11,13 +11,17 @@ from bytelatent.tokenizers.blt_tokenizer import BltTokenizer
 
 
 def main(prompt: str, model_name: str = "blt-1b"):
+    # [MOD] Modified model weights directory
+    root_dir = "/ifs/hpc/home/rdeluca"
+    weights_dir = os.path.join(root_dir, "hf-weights")
+    
     assert model_name in ["blt-1b", "blt-7b"]
     model_name = model_name.replace("-", "_")
     distributed_args = DistributedArgs()
     distributed_args.configure_world()
     if not torch.distributed.is_initialized():
         setup_torch_distributed(distributed_args)
-    checkpoint_path = os.path.join("hf-weights", model_name)
+    checkpoint_path = os.path.join(weights_dir, model_name)
     print(f"Loading BLT model: {model_name}")
     model, tokenizer, train_cfg = load_consolidated_model_and_tokenizer(
         checkpoint_path,
@@ -28,7 +32,7 @@ def main(prompt: str, model_name: str = "blt-1b"):
     patcher_args.realtime_patching = True
     print("Loading entropy model and patcher")
     patcher_args.entropy_model_checkpoint_dir = os.path.join(
-        "hf-weights", "entropy_model"
+        weights_dir, "entropy_model"
     )
     patcher = patcher_args.build()
     prompts = [prompt]
