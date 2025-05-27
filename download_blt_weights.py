@@ -5,7 +5,7 @@ from huggingface_hub import snapshot_download
 
 
 def main():
-    # Modified weights directory
+    # [Mod] Modified weights directory
     root_dir = "/ifs/hpc/home/rdeluca"
     local_dir = "hf-weights"
     weights_dir = os.path.join(root_dir, local_dir)
