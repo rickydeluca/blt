@@ -15,7 +15,7 @@ RUN python3.12 -m venv "$VENV_PATH"
 ENV PATH="$VENV_PATH/bin:$PATH"
 
 # Upgrade pip.
-RUN pip install --upgrade pip
+RUN pip install --upgrade pip setuptools wheel
 
 # Set working directory.
 WORKDIR /app
@@ -25,9 +25,9 @@ RUN git clone https://github.com/rickydeluca/blt.git
 WORKDIR /app/blt
 
 # Install Python dependencies.
-RUN pip install --pre torch --index-url https://download.pytorch.org/whl/nightly/cu121 \
+RUN pip install --pre torch --index-url https://download.pytorch.org/whl/nightly/cu121
 RUN pip install ninja
-RUN pip install -v -U git+https://github.com/facebookresearch/xformers.git@de742ec3d64bd83b1184cc043e541f15d270c148
+RUN pip install --no-build-isolation -v -U git+https://github.com/facebookresearch/xformers.git@de742ec3d64bd83b1184cc043e541f15d270c148
 RUN pip install -r requirements.txt
 
 # Start an interactive shell.
