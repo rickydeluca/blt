@@ -5,14 +5,9 @@ from huggingface_hub import snapshot_download
 
 
 def main():
-    # [Mod] Modified weights directory
-    root_dir = "/ifs/hpc/home/rdeluca"
-    local_dir = "hf-weights"
-    weights_dir = os.path.join(root_dir, local_dir)
-
-    if not os.path.exists(weights_dir):
-        os.makedirs(weights_dir)
-    snapshot_download(f"facebook/blt", local_dir=weights_dir)
+    if not os.path.exists("hf-weights"):
+        os.makedirs("hf-weights")
+    snapshot_download(f"facebook/blt", local_dir=f"hf-weights")
 
 
 if __name__ == "__main__":
