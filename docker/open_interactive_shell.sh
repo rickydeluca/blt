@@ -23,7 +23,7 @@ if [[ -f docker/.env ]]; then
 fi
 set +a
 
-echo "Creating container: ${CONTAINER_NAME}"
+echo "Opening interactive shell for the container: ${CONTAINER_NAME}"
 
 # Run
-docker run -it --rm --name $CONTAINER_NAME $IMAGE_NAME /bin/bash
+docker exec -it $CONTAINER_NAME bash 

@@ -1,34 +1,34 @@
 FROM nvidia/cuda:12.1.1-base-ubuntu22.04
 
-RUN apt update --quiet \
-    && apt install --yes --quiet software-properties-common \
-    && apt install --yes --quiet git wget build-essential
+# System dependencies
+RUN apt-get update --quiet \
+    && apt-get install --yes --quiet software-properties-common \
+    && apt-get install --yes --quiet git wget gcc g++ make
 
-# Install specific Python version. Tell APT this isn't an
-# interactive TTY to avoid prompt when installing.
+# Python
 RUN add-apt-repository ppa:deadsnakes/ppa \
-    && DEBIAN_FRONTEND=noninteractive apt install --yes --quiet python3.12 python3-pip python3.12-venv python3.12-dev
+    && DEBIAN_FRONTEND=noninteractive apt-get install --yes --quiet python3.12 python3-pip python3.12-venv python3.12-dev
 
-# Create a Python virtual environment.
-ENV VENV_PATH="/blt_venv" 
+# Python virtual environment
+ENV VENV_PATH="/opt/blt_venv" 
 RUN python3.12 -m venv "$VENV_PATH"
 ENV PATH="$VENV_PATH/bin:$PATH"
 
-# Upgrade pip.
+# Upgrade pip
 RUN pip install --upgrade pip setuptools wheel
 
-# Set working directory.
+# Set working directory
 WORKDIR /app
 
-# Clone the source code repository.
-RUN git clone https://github.com/rickydeluca/blt.git
+# Get the code
+RUN git clone https://github.com/facebookresearch/blt.git
 WORKDIR /app/blt
 
-# Install Python dependencies.
-RUN pip install --pre torch --index-url https://download.pytorch.org/whl/nightly/cu121
-RUN pip install ninja
-RUN pip install --no-build-isolation -v -U git+https://github.com/facebookresearch/xformers.git@de742ec3d64bd83b1184cc043e541f15d270c148
-RUN pip install -r requirements.txt
+# Python dependencies 
+RUN pip install --pre torch --index-url https://download.pytorch.org/whl/nightly/cu121 \
+    && pip install ninja \
+    && pip install -v -U git+https://github.com/facebookresearch/xformers.git@de742ec3d64bd83b1184cc043e541f15d270c148 \
+    && pip install -r requirements.txt
 
-# Start an interactive shell.
-CMD ['bash']
+# Run a loop application to keep the container running
+CMD ["bash", "-c", "while true; do sleep 30; done;"]
