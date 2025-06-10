@@ -30,5 +30,11 @@ RUN pip install --pre torch --index-url https://download.pytorch.org/whl/nightly
     && pip install -v -U git+https://github.com/facebookresearch/xformers.git@de742ec3d64bd83b1184cc043e541f15d270c148 \
     && pip install -r requirements.txt
 
+# Run entrypoint script to download model weights
+COPY docker/entrypoint.sh /app/blt/
+RUN chmod +x /app/blt/entrypoint.sh
+
+ENTRYPOINT ["app/blt/entrypoint.sh"]
+
 # Run a loop application to keep the container running
 CMD ["bash", "-c", "while true; do sleep 30; done;"]
