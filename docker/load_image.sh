@@ -1,4 +1,4 @@
-#!/usr/bin/env bas
+#!/usr/bin/env bash
 #
 # Load a Docker image from a .tar archive.
 #
